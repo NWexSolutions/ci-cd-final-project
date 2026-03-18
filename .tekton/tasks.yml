@@ -38,6 +38,25 @@ spec:
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
+  name: flake8
+spec:
+  description: Run flake8 linting
+  workspaces:
+    - name: source
+  steps:
+    - name: lint
+      image: python:3.9
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/usr/bin/env sh
+        set -eu
+        pip install flake8
+        flake8 . --ignore=E501
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
   name: nose
 spec:
   workspaces:
